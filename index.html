@@ -35,11 +35,11 @@
     <h1>タスク一覧</h1>
   </div>
 
-  <ul class="list-unstyled">
+  <ul class="list-unstyled" ng-cloak>
     <li ng-repeat="todo in main.todoList | filter : { done : false }">
-      <div class="checkbox form-inline" ng-show="!todo.editMode">
+      <div class="checkbox form-inline" ng-hide="todo.editMode">
         <label>
-          <input type="checkbox" name="todo-complete" value='true' ng-model="todo.done">
+          <input type="checkbox" name="todo-complete" value='true' ng-model="todo.done" ng-change="main.changeToDone(todo)">
           {{ todo.todo  }}
         </label>
         <button class="btn btn-default" ng-click="main.showEditMode(todo)">編集</button>
@@ -53,8 +53,8 @@
     </li>
   </ul>
 
-  <div ng-show="main.todoList.length < 1">
-    <p>TODOなし！おめでとう！</p>
+  <div ng-show="main.showEmpty">
+    <p>TODOはありません！</p>
   </div>
 
 </div><!-- /container -->
