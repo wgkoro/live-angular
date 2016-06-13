@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="live">
 <head>
   <meta charset='utf-8'>
   <title>AngularJS ライブコーディング</title>
@@ -13,11 +13,11 @@
   <script src="./js/app.js"></script>
 </head>
 <body>
-<div class="container">
+<div class="container" ng-controller="MainController as main">
 
-  <div class="alert alert-success">
+  <div class="alert alert-success" style="display:none;" toast>
     <p>
-      TODO1を完了しました&nbsp;
+    TODO1を完了しました&nbsp;
       <!-- a href="#">未完了に戻す</a -->
     </p>
   </div>
@@ -27,8 +27,8 @@
   </div>
 
   <div>
-    <p><input type="text" value="" placeholder="新規TODOを入力" class="form-control"></p>
-    <p style="text-align:right"><button class="btn btn-default">登録</button></p>
+    <p><input type="text" value="" placeholder="新規TODOを入力" class="form-control" ng-model="main.newTodo"></p>
+    <p style="text-align:right"><button class="btn btn-default" ng-click="main.createNewTodo()">登録</button></p>
   </div>
   
   <div class="page-header">
@@ -36,33 +36,24 @@
   </div>
 
   <ul class="list-unstyled">
-    <li>
-      <div class="checkbox form-inline">
+    <li ng-repeat="todo in main.todoList | filter : { done : false }">
+      <div class="checkbox form-inline" ng-show="!todo.editMode">
         <label>
-          <input type="checkbox" name="todo-complete">
-          TODO1
+          <input type="checkbox" name="todo-complete" value='true' ng-model="todo.done">
+          {{ todo.todo  }}
         </label>
-        <button class="btn btn-default">編集</button>
+        <button class="btn btn-default" ng-click="main.showEditMode(todo)">編集</button>
       </div>
-      <div>
+      <div ng-show="todo.editMode">
         <!-- 編集モード -->
-        <input type="text" name="todo" value="TODO1" class="form-inline">
-        <button class="btn btn-primary">適用</button>&nbsp;
-        <button class="btn btn-default">キャンセル</button>
-      </div>
-    </li>
-    <li>
-      <div class="checkbox form-inline">
-        <label>
-          <input type="checkbox" name="todo-complete">
-          TODO2
-        </label>
-        <button class="btn btn-default">編集</button>
+        <input type="text" name="todo" value="" class="form-inline" ng-model="todo.todo">
+        <button class="btn btn-primary" ng-click="main.hideEditMode(todo)">適用</button>&nbsp;
+        <button class="btn btn-default" ng-click="main.cancel(todo)">キャンセル</button>
       </div>
     </li>
   </ul>
 
-  <div>
+  <div ng-show="main.todoList.length < 1">
     <p>TODOなし！おめでとう！</p>
   </div>
 
